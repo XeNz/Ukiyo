@@ -1,7 +1,6 @@
 namespace Ukiyo.Infrastructure.Common
 {
-    public class ObjectExtensions
+    public static class ObjectExtensions
     {
-        
     }
 }

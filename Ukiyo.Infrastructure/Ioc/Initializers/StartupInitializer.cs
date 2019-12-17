@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ukiyo.Infrastructure.Ioc
+namespace Ukiyo.Infrastructure.Ioc.Initializers
 {
     public class StartupInitializer : IStartupInitializer
     {

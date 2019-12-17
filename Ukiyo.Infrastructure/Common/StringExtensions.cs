@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Ukiyo.Infrastructure.Common.StringExtensions
+namespace Ukiyo.Infrastructure.Common
 {
     public static class StringExtensions
     {

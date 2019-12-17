@@ -1,7 +1,11 @@
 using System;
-using Ukiyo.Infrastructure.Ioc;
+using Microsoft.Extensions.DependencyInjection;
+using Ukiyo.Infrastructure.Caching.Builders;
+using Ukiyo.Infrastructure.Caching.Options;
+using Ukiyo.Infrastructure.Ioc.Builders;
+using Ukiyo.Infrastructure.Ioc.Extensions;
 
-namespace Ukiyo.Infrastructure.Caching
+namespace Ukiyo.Infrastructure.Caching.Extensions
 {
     public static class RedisExtensions
     {

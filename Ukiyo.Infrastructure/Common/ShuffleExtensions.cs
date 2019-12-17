@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Ukiyo.Infrastructure.Common.CollectionExtensions
+namespace Ukiyo.Infrastructure.Common
 {
     /// <summary>
     /// Provides <c>Shuffle</c> extensions methods for <see cref="IList{T}" />.

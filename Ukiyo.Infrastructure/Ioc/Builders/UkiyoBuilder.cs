@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Ukiyo.Infrastructure.Ioc.Initializers;
 
-namespace Ukiyo.Infrastructure.Ioc
+namespace Ukiyo.Infrastructure.Ioc.Builders
 {
     public class UkiyoBuilder : IUkiyoBuilder
     {

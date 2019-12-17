@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Ukiyo.Infrastructure.DAL
+namespace Ukiyo.Infrastructure.DAL.Base
 {
-    public interface IRepository
+    public interface IRepository <T> where T : BaseEntity, IAggregateRoot
     {
-        Task<T> GetById<T>(int id) where T : BaseEntity;
-        Task<List<T>> List<T>() where T : BaseEntity;
-        Task<T> Add<T>(T entity) where T : BaseEntity;
-        Task<T> Update<T>(T entity) where T : BaseEntity;
-        Task Delete<T>(T entity) where T : BaseEntity;
+        Task<T> GetByIdAsync(int id);
+        Task<IReadOnlyList<T>> ListAllAsync();
+        Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
+        Task<T> AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
+        Task<int> CountAsync(ISpecification<T> spec);
     }
 }

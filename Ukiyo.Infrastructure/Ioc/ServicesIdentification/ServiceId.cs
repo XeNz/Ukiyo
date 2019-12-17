@@ -1,6 +1,6 @@
 using System;
 
-namespace Ukiyo.Infrastructure.Ioc
+namespace Ukiyo.Infrastructure.Ioc.ServicesIdentification
 {
     public class ServiceId : IServiceId
     {

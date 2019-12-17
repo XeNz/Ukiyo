@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ukiyo.Infrastructure.DAL
+namespace Ukiyo.Infrastructure.DAL.Identity
 {
     public class AppIdentityDbContext : IdentityDbContext<ApplicationUser>
     {

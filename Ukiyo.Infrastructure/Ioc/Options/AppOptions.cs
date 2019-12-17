@@ -1,4 +1,4 @@
-namespace Ukiyo.Infrastructure.Ioc
+namespace Ukiyo.Infrastructure.Ioc.Options
 {
     public class AppOptions
     {
