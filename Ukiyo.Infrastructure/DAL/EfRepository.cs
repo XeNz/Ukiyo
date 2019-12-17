@@ -8,9 +8,9 @@ namespace Ukiyo.Infrastructure.DAL
 {
     public class EfRepository<T> : IRepository<T> where T : BaseEntity, IAggregateRoot
     {
-        protected readonly AppDbContext DbContext;
+        protected readonly DbContext DbContext;
 
-        public EfRepository(AppDbContext dbContext)
+        public EfRepository(DbContext dbContext)
         {
             DbContext = dbContext;
         }

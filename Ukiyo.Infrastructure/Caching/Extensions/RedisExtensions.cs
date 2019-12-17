@@ -12,9 +12,9 @@ namespace Ukiyo.Infrastructure.Caching.Extensions
         private const string SectionName = "redis";
         private const string RegistryName = "persistence.redis";
 
-        public static IUkiyoBuilder AddRedis(this IUkiyoBuilder builder, string sectionName = SectionName)
+        public static IUkiyoBuilder AddRedis(this IUkiyoBuilder builder, string configurationSectionName = SectionName)
         {
-            var options = builder.GetOptions<RedisOptions>(sectionName);
+            var options = builder.GetOptions<RedisOptions>(configurationSectionName);
             return builder.AddRedis(options);
         }
 

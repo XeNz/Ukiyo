@@ -1,41 +1,35 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ukiyo.Infrastructure.Caching.Extensions;
 using Ukiyo.Infrastructure.DAL.Extensions;
-using Ukiyo.Infrastructure.DAL.Options;
-using Ukiyo.Infrastructure.Ioc;
 using Ukiyo.Infrastructure.Ioc.Extensions;
 
 namespace Ukiyo.Api
 {
     public class Program
     {
-        public static async Task Main(string[] args)
-        {
-            var webhost = CreateHostBuilder(args);
-            var build = webhost.Build();
-            await build.RunAsync();
-        }
+        public static async Task Main(string[] args) => await CreateHostBuilder(args).Build().RunAsync();
 
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var dbOptions = new DatabaseOptions();
-
             return Host.CreateDefaultBuilder(args)
+                //.ConfigureAppConfiguration(builder => { })
                 .ConfigureWebHostDefaults(builder =>
                 {
                     builder.ConfigureServices(services =>
                     {
-                        services
-                            .AddControllers();
+                        services.AddControllers();
 
                         services.AddUkiyo()
-                            .AddDbContext(dbOptions)
+                            .AddDbContext()
+                            .AddUnitOfWork()
+                            .AddRedis()
                             .Build();
                     });
+
                     builder.Configure(app =>
                     {
                         app.UseHttpsRedirection();
@@ -43,14 +37,6 @@ namespace Ukiyo.Api
                         app.UseAuthorization();
                         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
                     });
-                })
-                .ConfigureAppConfiguration(builder =>
-                {
-                    builder.AddJsonFile("appsettings.json");
-
-                    builder.Build()
-                        .GetSection("DataAccess:ConnectionString")
-                        .Bind(dbOptions);
                 });
         }
     }
