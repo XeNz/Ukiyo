@@ -19,7 +19,8 @@ namespace Ukiyo.Infrastructure.DAL.Extensions
 
         public static IUkiyoBuilder AddUnitOfWork(this IUkiyoBuilder builder, UnitOfWorkOptions unitOfWorkOptions)
         {
-            if (unitOfWorkOptions != null && unitOfWorkOptions.AddDefaultAppDbAndIdentityContext)
+            // #TODO: maybe try scrutor to get all db contexts in in runtime assemblies
+            if (unitOfWorkOptions != null && unitOfWorkOptions.AddAllDbContexts)
             {
                 builder.Services.AddUnitOfWork<AppDbContext, IdentityDbContext>();
             }
@@ -54,7 +55,6 @@ namespace Ukiyo.Infrastructure.DAL.Extensions
             services.AddScoped<IUnitOfWork.IUnitOfWork<TContext1>, UnitOfWork<TContext1>>();
             services.AddScoped<IUnitOfWork.IUnitOfWork<TContext2>, UnitOfWork<TContext2>>();
             services.AddScoped<IUnitOfWork.IUnitOfWork<TContext3>, UnitOfWork<TContext3>>();
-
             return services;
         }
 
@@ -69,7 +69,6 @@ namespace Ukiyo.Infrastructure.DAL.Extensions
             services.AddScoped<IUnitOfWork.IUnitOfWork<TContext2>, UnitOfWork<TContext2>>();
             services.AddScoped<IUnitOfWork.IUnitOfWork<TContext3>, UnitOfWork<TContext3>>();
             services.AddScoped<IUnitOfWork.IUnitOfWork<TContext4>, UnitOfWork<TContext4>>();
-
             return services;
         }
     }
