@@ -37,7 +37,7 @@ namespace Ukiyo.Infrastructure.Caching.Extensions
                 o.Configuration = options.ConnectionString;
                 o.InstanceName = options.Instance;
             });
-
+            
             return builder;
         }
     }

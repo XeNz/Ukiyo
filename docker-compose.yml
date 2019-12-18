@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=letmein32
+    ports:
+      - 5432:5432
+    volumes:
+      - ./devtools/postgres:/docker-entrypoint-initdb.d
+      - ./deploy/migration:/deploy/migration
+      - ./deploy/testdata:/deploy/testdata
+  redis:
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./redis/data:/bitnami/redis/data
