@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Ukiyo.Infrastructure.DAL;
+using Ukiyo.Core;
 
-namespace Ukiyo.Infrastructure.Migrations
+namespace Ukiyo.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191218114917_TEST2")]
-    partial class TEST2
+    [Migration("20200104000937_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

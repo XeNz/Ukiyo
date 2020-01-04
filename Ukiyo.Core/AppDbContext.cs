@@ -6,7 +6,7 @@ using Ukiyo.Core.Entities;
 using Ukiyo.Infrastructure.DAL.Identity;
 using Z.EntityFramework.Plus;
 
-namespace Ukiyo.Infrastructure.DAL
+namespace Ukiyo.Core
 {
     public class AppDbContext : DbContext
     {
@@ -24,25 +24,25 @@ namespace Ukiyo.Infrastructure.DAL
         public DbSet<ApplicationUser> User { get; set; }
 
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return this.SaveChangesAsync(new Audit(), cancellationToken);
-        }
-
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
-        {
-            return SaveChangesAsync(cancellationToken);
-        }
+        // public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        // {
+        //     return this.SaveChangesAsync(new Audit(), cancellationToken);
+        // }
+        //
+        // public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        // {
+        //     return SaveChangesAsync(cancellationToken);
+        // }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-
-        static AppDbContext()
-        {
-            AuditManager.DefaultConfiguration.AutoSavePreAction = (context, audit) => (context as AppDbContext)?.AuditEntries.AddRange(audit.Entries);
-        }
+        //
+        // static AppDbContext()
+        // {
+        //     AuditManager.DefaultConfiguration.AutoSavePreAction = (context, audit) => (context as AppDbContext)?.AuditEntries.AddRange(audit.Entries);
+        // }
     }
 }

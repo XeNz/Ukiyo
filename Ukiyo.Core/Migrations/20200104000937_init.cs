@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Ukiyo.Infrastructure.Migrations
+namespace Ukiyo.Core.Migrations
 {
     public partial class init : Migration
     {

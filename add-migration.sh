@@ -18,4 +18,4 @@ done
 
 echo "Trying to create migration with name $MIGRATIONNAME"
 
-dotnet ef migrations add $MIGRATIONNAME --project ".\Ukiyo.Infrastructure\Ukiyo.Infrastructure.csproj" --startup-project ".\Ukiyo.Api\Ukiyo.Api.csproj" --context "AppDbContext"
+dotnet ef migrations add $MIGRATIONNAME --project ".\Ukiyo.Core\Ukiyo.Core.csproj" --startup-project ".\Ukiyo.Api\Ukiyo.Api.csproj" --context "AppDbContext"

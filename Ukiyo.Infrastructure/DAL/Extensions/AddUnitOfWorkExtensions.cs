@@ -11,22 +11,22 @@ namespace Ukiyo.Infrastructure.DAL.Extensions
     {
         private const string SectionName = "uow";
 
-        public static IUkiyoBuilder AddUnitOfWork(this IUkiyoBuilder builder, string configurationSectionName = SectionName)
-        {
-            var options = builder.GetOptions<UnitOfWorkOptions>(configurationSectionName);
-            return builder.AddUnitOfWork(options);
-        }
+        // public static IUkiyoBuilder AddUnitOfWork(this IUkiyoBuilder builder, string configurationSectionName = SectionName)
+        // {
+        //     var options = builder.GetOptions<UnitOfWorkOptions>(configurationSectionName);
+        //     return builder.AddUnitOfWork(options);
+        // }
 
-        public static IUkiyoBuilder AddUnitOfWork(this IUkiyoBuilder builder, UnitOfWorkOptions unitOfWorkOptions)
-        {
-            // #TODO: maybe try scrutor to get all db contexts in in runtime assemblies
-            if (unitOfWorkOptions != null && unitOfWorkOptions.AddAllDbContexts)
-            {
-                builder.Services.AddUnitOfWork<AppDbContext, IdentityDbContext>();
-            }
-
-            return builder;
-        }
+        // public static IUkiyoBuilder AddUnitOfWork(this IUkiyoBuilder builder, UnitOfWorkOptions unitOfWorkOptions)
+        // {
+        //     // #TODO: maybe try scrutor to get all db contexts in in runtime assemblies
+        //     if (unitOfWorkOptions != null && unitOfWorkOptions.AddAllDbContexts)
+        //     {
+        //         builder.Services.AddUnitOfWork<AppDbContext, IdentityDbContext>();
+        //     }
+        //
+        //     return builder;
+        // }
 
         public static IServiceCollection AddUnitOfWork<TContext>(this IServiceCollection services)
             where TContext : DbContext
