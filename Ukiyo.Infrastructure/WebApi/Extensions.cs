@@ -14,24 +14,25 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Open.Serialization.Json;
+using Open.Serialization.Json.Utf8Json;
 using Ukiyo.Infrastructure.Ioc.Builders;
 using Ukiyo.Infrastructure.Ioc.Extensions;
-using Microsoft.Extensions.DependencyInjection;
 using Ukiyo.Infrastructure.WebApi.Exceptions;
 using Ukiyo.Infrastructure.WebApi.Formatters;
 using Ukiyo.Infrastructure.WebApi.Requests;
 using Utf8Json;
+using Utf8Json.Resolvers;
 
 namespace Ukiyo.Infrastructure.WebApi
 {
     public static class Extensions
     {
-        private static readonly byte[] InvalidJsonRequestBytes = Encoding.UTF8.GetBytes("An invalid JSON was sent.");
         private const string SectionName = "webApi";
         private const string RegistryName = "webApi";
         private const string EmptyJsonObject = "{}";
         private const string LocationHeader = "Location";
         private const string JsonContentType = "application/json";
+        private static readonly byte[] InvalidJsonRequestBytes = Encoding.UTF8.GetBytes("An invalid JSON was sent.");
         private static bool _bindRequestFromRoute;
 
         public static IApplicationBuilder UseEndpoints(this IApplicationBuilder app, Action<IEndpointsBuilder> build)
@@ -46,19 +47,14 @@ namespace Ukiyo.Infrastructure.WebApi
         public static IUkiyoBuilder AddWebApi(this IUkiyoBuilder builder, Action<IMvcCoreBuilder> configureMvc, IJsonSerializer jsonSerializer = null,
             string sectionName = SectionName)
         {
-            if (string.IsNullOrWhiteSpace(sectionName))
-            {
-                sectionName = SectionName;
-            }
+            if (string.IsNullOrWhiteSpace(sectionName)) sectionName = SectionName;
 
-            if (!builder.TryRegister(RegistryName))
-            {
-                return builder;
-            }
+            if (!builder.TryRegister(RegistryName)) return builder;
 
             if (jsonSerializer is null)
             {
-                var factory = new Open.Serialization.Json.Utf8Json.JsonSerializerFactory(new UkiyoFormatterResolver());
+                var factory = new JsonSerializerFactory(StandardResolver.AllowPrivateCamelCase);
+                JsonSerializer.SetDefaultResolver(new UkiyoFormatterResolver());
                 jsonSerializer = factory.GetSerializer();
             }
 
@@ -75,10 +71,11 @@ namespace Ukiyo.Infrastructure.WebApi
 
             mvcCoreBuilder.AddMvcOptions(o =>
                 {
+                    var resolver = CompositeResolver.Create(EnumResolver.Default, StandardResolver.AllowPrivateCamelCase);
                     o.OutputFormatters.Clear();
-                    o.OutputFormatters.Add(new JsonOutputFormatter());
+                    o.OutputFormatters.Add(new JsonOutputFormatter(resolver));
                     o.InputFormatters.Clear();
-                    o.InputFormatters.Add(new JsonInputFormatter());
+                    o.InputFormatters.Add(new JsonInputFormatter(resolver));
                 })
                 .AddDataAnnotations()
                 .AddApiExplorer()
@@ -115,38 +112,37 @@ namespace Ukiyo.Infrastructure.WebApi
 
         public static Task<TResult> DispatchAsync<TRequest, TResult>(this HttpContext httpContext, TRequest request)
             where TRequest : class, IRequest
-            => httpContext.RequestServices.GetService<IRequestHandler<TRequest, TResult>>().HandleAsync(request);
+        {
+            return httpContext.RequestServices.GetService<IRequestHandler<TRequest, TResult>>().HandleAsync(request);
+        }
 
         public static T Bind<T>(this T model, Expression<Func<T, object>> expression, object value)
-            => model.Bind<T, object>(expression, value);
+        {
+            return model.Bind<T, object>(expression, value);
+        }
 
         public static T BindId<T>(this T model, Expression<Func<T, Guid>> expression)
-            => model.Bind(expression, Guid.NewGuid());
+        {
+            return model.Bind(expression, Guid.NewGuid());
+        }
 
         public static T BindId<T>(this T model, Expression<Func<T, string>> expression)
-            => model.Bind(expression, Guid.NewGuid().ToString("N"));
+        {
+            return model.Bind(expression, Guid.NewGuid().ToString("N"));
+        }
 
         private static TModel Bind<TModel, TProperty>(this TModel model, Expression<Func<TModel, TProperty>> expression,
             object value)
         {
-            if (!(expression.Body is MemberExpression memberExpression))
-            {
-                memberExpression = ((UnaryExpression) expression.Body).Operand as MemberExpression;
-            }
+            if (!(expression.Body is MemberExpression memberExpression)) memberExpression = ((UnaryExpression) expression.Body).Operand as MemberExpression;
 
-            if (memberExpression is null)
-            {
-                throw new InvalidOperationException("Invalid member expression.");
-            }
+            if (memberExpression is null) throw new InvalidOperationException("Invalid member expression.");
 
             var propertyName = memberExpression.Member.Name.ToLowerInvariant();
             var modelType = model.GetType();
             var field = modelType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
                 .SingleOrDefault(x => x.Name.ToLowerInvariant().StartsWith($"<{propertyName}>"));
-            if (field is null)
-            {
-                return model;
-            }
+            if (field is null) return model;
 
             field.SetValue(model, value);
 
@@ -162,15 +158,9 @@ namespace Ukiyo.Infrastructure.WebApi
         public static Task Created(this HttpResponse response, string location = null, object data = null)
         {
             response.StatusCode = 201;
-            if (string.IsNullOrWhiteSpace(location))
-            {
-                return Task.CompletedTask;
-            }
+            if (string.IsNullOrWhiteSpace(location)) return Task.CompletedTask;
 
-            if (!response.Headers.ContainsKey(LocationHeader))
-            {
-                response.Headers.Add(LocationHeader, location);
-            }
+            if (!response.Headers.ContainsKey(LocationHeader)) response.Headers.Add(LocationHeader, location);
 
             return data is null ? Task.CompletedTask : response.WriteJsonAsync(data);
         }
@@ -190,10 +180,7 @@ namespace Ukiyo.Infrastructure.WebApi
         public static Task MovedPermanently(this HttpResponse response, string url)
         {
             response.StatusCode = (int) HttpStatusCode.MovedPermanently;
-            if (!response.Headers.ContainsKey(LocationHeader))
-            {
-                response.Headers.Add(LocationHeader, url);
-            }
+            if (!response.Headers.ContainsKey(LocationHeader)) response.Headers.Add(LocationHeader, url);
 
             return Task.CompletedTask;
         }
@@ -201,10 +188,7 @@ namespace Ukiyo.Infrastructure.WebApi
         public static Task Redirect(this HttpResponse response, string url)
         {
             response.StatusCode = (int) HttpStatusCode.PermanentRedirect;
-            if (!response.Headers.ContainsKey(LocationHeader))
-            {
-                response.Headers.Add(LocationHeader, url);
-            }
+            if (!response.Headers.ContainsKey(LocationHeader)) response.Headers.Add(LocationHeader, url);
 
             return Task.CompletedTask;
         }
@@ -269,10 +253,7 @@ namespace Ukiyo.Infrastructure.WebApi
                             .SingleOrDefault(f => f.Name.ToLowerInvariant().StartsWith($"<{key}>",
                                 StringComparison.InvariantCultureIgnoreCase));
 
-                        if (field is null)
-                        {
-                            continue;
-                        }
+                        if (field is null) continue;
 
                         var fieldValue = TypeDescriptor.GetConverter(field.FieldType)
                             .ConvertFromInvariantString(value.ToString());
@@ -281,10 +262,7 @@ namespace Ukiyo.Infrastructure.WebApi
                 }
 
                 var results = new List<ValidationResult>();
-                if (Validator.TryValidateObject(payload, new ValidationContext(payload), results))
-                {
-                    return payload;
-                }
+                if (Validator.TryValidateObject(payload, new ValidationContext(payload), results)) return payload;
 
                 httpContext.Response.StatusCode = 400;
                 await httpContext.Response.WriteJsonAsync(results);
@@ -304,26 +282,17 @@ namespace Ukiyo.Infrastructure.WebApi
         {
             var request = context.Request;
             RouteValueDictionary values = null;
-            if (HasRouteData(request))
-            {
-                values = request.HttpContext.GetRouteData().Values;
-            }
+            if (HasRouteData(request)) values = request.HttpContext.GetRouteData().Values;
 
             if (HasQueryString(request))
             {
                 var queryString = HttpUtility.ParseQueryString(request.HttpContext.Request.QueryString.Value);
                 values ??= new RouteValueDictionary();
-                foreach (var key in queryString.AllKeys)
-                {
-                    values.TryAdd(key, queryString[key]);
-                }
+                foreach (var key in queryString.AllKeys) values.TryAdd(key, queryString[key]);
             }
 
             var serializer = context.RequestServices.GetRequiredService<IJsonSerializer>();
-            if (values is null)
-            {
-                return serializer.Deserialize<T>(EmptyJsonObject);
-            }
+            if (values is null) return serializer.Deserialize<T>(EmptyJsonObject);
 
             var serialized = serializer.Serialize(values.ToDictionary(k => k.Key, k => k.Value))
                 .Replace("\\\"", "\"")
@@ -336,31 +305,28 @@ namespace Ukiyo.Infrastructure.WebApi
         }
 
         private static bool HasQueryString(this HttpRequest request)
-            => request.Query.Any();
+        {
+            return request.Query.Any();
+        }
 
         private static bool HasRouteData(this HttpRequest request)
-            => request.HttpContext.GetRouteData().Values.Any();
+        {
+            return request.HttpContext.GetRouteData().Values.Any();
+        }
 
         public static string Args(this HttpContext context, string key)
-            => context.Args<string>(key);
+        {
+            return context.Args<string>(key);
+        }
 
         public static T Args<T>(this HttpContext context, string key)
         {
-            if (!context.GetRouteData().Values.TryGetValue(key, out var value))
-            {
-                return default;
-            }
+            if (!context.GetRouteData().Values.TryGetValue(key, out var value)) return default;
 
-            if (typeof(T) == typeof(string) && value is string)
-            {
-                return (T) value;
-            }
+            if (typeof(T) == typeof(string) && value is string) return (T) value;
 
             var data = value?.ToString();
-            if (string.IsNullOrWhiteSpace(data))
-            {
-                return default;
-            }
+            if (string.IsNullOrWhiteSpace(data)) return default;
 
             return (T) TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(data);
         }

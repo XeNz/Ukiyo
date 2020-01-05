@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ukiyo.Infrastructure.DAL.Options;
-using Ukiyo.Infrastructure.Ioc.Builders;
-using Ukiyo.Infrastructure.Ioc.Extensions;
 
 namespace Ukiyo.Infrastructure.DAL.Extensions
 {

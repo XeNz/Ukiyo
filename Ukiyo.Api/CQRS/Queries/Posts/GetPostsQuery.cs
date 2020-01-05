@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Ukiyo.Api.Dtos;
 using Ukiyo.Core;
 using Ukiyo.Infrastructure.CQRS.Queries;
 
-namespace Ukiyo.Api.CQRS
+namespace Ukiyo.Api.CQRS.Queries.Posts
 {
     public class GetPostsQuery : IQuery<PostCollectionDto>
     {
@@ -30,8 +31,7 @@ namespace Ukiyo.Api.CQRS
 
         public async Task<PostCollectionDto> HandleAsync(GetPostsQuery query)
         {
-            // var result = await _dbContext.Posts.ProjectTo<PostDto>(_mapper.ConfigurationProvider).ToListAsync();
-            var result = _mapper.Map<IEnumerable<PostDto>>(await _dbContext.Posts.ToListAsync());
+            var result = await _dbContext.Posts.ProjectTo<PostDto>(_mapper.ConfigurationProvider).ToListAsync();
             return new PostCollectionDto {Posts = result};
         }
     }

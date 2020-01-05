@@ -18,7 +18,7 @@ namespace Ukiyo.Infrastructure.CQRS.Extensions
 
             return builder;
         }
-        
+
         public static IUkiyoBuilder AddInMemoryQueryDispatcher(this IUkiyoBuilder builder)
         {
             builder.Services.AddSingleton<IQueryDispatcher, QueryDispatcher>();

@@ -28,6 +28,7 @@ namespace Ukiyo.Infrastructure.DAL.Extensions
             {
 #if DEBUG
                 options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
 #endif
                 options.UseNpgsql(connectionString, builder =>
                 {

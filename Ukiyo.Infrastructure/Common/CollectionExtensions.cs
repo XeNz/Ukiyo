@@ -7,8 +7,8 @@ namespace Ukiyo.Infrastructure.Common
     public static class CollectionExtensions
     {
         /// <summary>
-        /// Copies all the elements of the current collection to the specified list
-        /// starting at the specified destination array index. The index is specified as a 32-bit integer.
+        ///     Copies all the elements of the current collection to the specified list
+        ///     starting at the specified destination array index. The index is specified as a 32-bit integer.
         /// </summary>
         /// <param name="source">The current collection that is the source of the elements.</param>
         /// <param name="destination">The list that is the destination of the elements copied from the current collection.</param>
@@ -16,10 +16,7 @@ namespace Ukiyo.Infrastructure.Common
         /// <typeparam name="T"></typeparam>
         public static void CopyTo<T>(this IReadOnlyList<T> source, IList<T> destination, int index = 0)
         {
-            for (var i = 0; i < source.Count; i++)
-            {
-                destination[index + i] = source[i];
-            }
+            for (var i = 0; i < source.Count; i++) destination[index + i] = source[i];
         }
 
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -40,10 +37,7 @@ namespace Ukiyo.Infrastructure.Common
                 var key = firstKeySelector(element);
 
                 // Remove the key so we only yield once
-                if (keys.Remove(key))
-                {
-                    yield return element;
-                }
+                if (keys.Remove(key)) yield return element;
             }
         }
 
@@ -73,10 +67,7 @@ namespace Ukiyo.Infrastructure.Common
             foreach (var item in src)
             {
                 var key = keySelector(item);
-                if (!result.ContainsKey(key))
-                {
-                    result[key] = item;
-                }
+                if (!result.ContainsKey(key)) result[key] = item;
             }
 
             return result;
@@ -89,10 +80,7 @@ namespace Ukiyo.Infrastructure.Common
             foreach (var item in src)
             {
                 var key = keySelector(item);
-                if (!result.ContainsKey(key))
-                {
-                    result[key] = valueSelector(item);
-                }
+                if (!result.ContainsKey(key)) result[key] = valueSelector(item);
             }
 
             return result;
@@ -100,10 +88,7 @@ namespace Ukiyo.Infrastructure.Common
 
         public static void AddIfNotNull<TSource>(this List<TSource> source, TSource item)
         {
-            if (item == null)
-            {
-                return;
-            }
+            if (item == null) return;
 
             source.Add(item);
         }

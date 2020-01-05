@@ -19,6 +19,8 @@ namespace Ukiyo.Infrastructure.Caching.Builders
         }
 
         public RedisOptions Build()
-            => _options;
+        {
+            return _options;
+        }
     }
 }

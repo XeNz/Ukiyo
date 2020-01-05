@@ -4,6 +4,8 @@ namespace Ukiyo.Infrastructure.Common
 {
     public static class DateTimeExtensions
     {
+        public static DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
         public static bool InNextDays(this DateTime dateTime, int days)
         {
             return InNext(dateTime, new TimeSpan(days, 0, 0, 0));
@@ -38,7 +40,5 @@ namespace Ukiyo.Infrastructure.Common
         {
             return dateTime >= afterDateTime && dateTime <= beforeDateTime;
         }
-
-        public static DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
     }
 }

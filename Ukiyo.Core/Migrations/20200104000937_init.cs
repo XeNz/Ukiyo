@@ -9,68 +9,59 @@ namespace Ukiyo.Core.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AuditEntries",
-                columns: table => new
+                "AuditEntries",
+                table => new
                 {
-                    AuditEntryID = table.Column<int>(nullable: false)
+                    AuditEntryID = table.Column<int>()
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedBy = table.Column<string>(maxLength: 255, nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(),
                     EntitySetName = table.Column<string>(maxLength: 255, nullable: true),
                     EntityTypeName = table.Column<string>(maxLength: 255, nullable: true),
-                    State = table.Column<int>(nullable: false),
+                    State = table.Column<int>(),
                     StateName = table.Column<string>(maxLength: 255, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AuditEntries", x => x.AuditEntryID);
-                });
+                constraints: table => { table.PrimaryKey("PK_AuditEntries", x => x.AuditEntryID); });
 
             migrationBuilder.CreateTable(
-                name: "Languages",
-                columns: table => new
+                "Languages",
+                table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(),
                     Abbreviation = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Languages", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Languages", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
+                "User",
+                table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(),
                     UserName = table.Column<string>(nullable: true),
                     NormalizedUserName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     NormalizedEmail = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    EmailConfirmed = table.Column<bool>(),
                     PasswordHash = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    PhoneNumberConfirmed = table.Column<bool>(),
+                    TwoFactorEnabled = table.Column<bool>(),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    LockoutEnabled = table.Column<bool>(),
+                    AccessFailedCount = table.Column<int>()
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_User", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "AuditEntryProperties",
-                columns: table => new
+                "AuditEntryProperties",
+                table => new
                 {
-                    AuditEntryPropertyID = table.Column<int>(nullable: false)
+                    AuditEntryPropertyID = table.Column<int>()
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AuditEntryID = table.Column<int>(nullable: false),
+                    AuditEntryID = table.Column<int>(),
                     PropertyName = table.Column<string>(maxLength: 255, nullable: true),
                     RelationName = table.Column<string>(maxLength: 255, nullable: true),
                     NewValue = table.Column<string>(nullable: true),
@@ -80,18 +71,18 @@ namespace Ukiyo.Core.Migrations
                 {
                     table.PrimaryKey("PK_AuditEntryProperties", x => x.AuditEntryPropertyID);
                     table.ForeignKey(
-                        name: "FK_AuditEntryProperties_AuditEntries_AuditEntryID",
-                        column: x => x.AuditEntryID,
-                        principalTable: "AuditEntries",
-                        principalColumn: "AuditEntryID",
+                        "FK_AuditEntryProperties_AuditEntries_AuditEntryID",
+                        x => x.AuditEntryID,
+                        "AuditEntries",
+                        "AuditEntryID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
+                "Comments",
+                table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(),
                     ParentCommentId = table.Column<int>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true)
@@ -100,18 +91,18 @@ namespace Ukiyo.Core.Migrations
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
+                        "FK_Comments_User_UserId",
+                        x => x.UserId,
+                        "User",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Posts",
-                columns: table => new
+                "Posts",
+                table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(),
                     Description = table.Column<string>(nullable: true),
                     Code = table.Column<string>(nullable: true),
                     CodeLanguageId = table.Column<Guid>(nullable: true),
@@ -121,59 +112,59 @@ namespace Ukiyo.Core.Migrations
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_Languages_CodeLanguageId",
-                        column: x => x.CodeLanguageId,
-                        principalTable: "Languages",
-                        principalColumn: "Id",
+                        "FK_Posts_Languages_CodeLanguageId",
+                        x => x.CodeLanguageId,
+                        "Languages",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Posts_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
+                        "FK_Posts_User_UserId",
+                        x => x.UserId,
+                        "User",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuditEntryProperties_AuditEntryID",
-                table: "AuditEntryProperties",
-                column: "AuditEntryID");
+                "IX_AuditEntryProperties_AuditEntryID",
+                "AuditEntryProperties",
+                "AuditEntryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
-                column: "UserId");
+                "IX_Comments_UserId",
+                "Comments",
+                "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_CodeLanguageId",
-                table: "Posts",
-                column: "CodeLanguageId");
+                "IX_Posts_CodeLanguageId",
+                "Posts",
+                "CodeLanguageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_UserId",
-                table: "Posts",
-                column: "UserId");
+                "IX_Posts_UserId",
+                "Posts",
+                "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AuditEntryProperties");
+                "AuditEntryProperties");
 
             migrationBuilder.DropTable(
-                name: "Comments");
+                "Comments");
 
             migrationBuilder.DropTable(
-                name: "Posts");
+                "Posts");
 
             migrationBuilder.DropTable(
-                name: "AuditEntries");
+                "AuditEntries");
 
             migrationBuilder.DropTable(
-                name: "Languages");
+                "Languages");
 
             migrationBuilder.DropTable(
-                name: "User");
+                "User");
         }
     }
 }

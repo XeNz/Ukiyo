@@ -4,14 +4,14 @@ using System.Collections.Generic;
 namespace Ukiyo.Infrastructure.Common
 {
     /// <summary>
-    /// Provides <c>Shuffle</c> extensions methods for <see cref="IList{T}" />.
+    ///     Provides <c>Shuffle</c> extensions methods for <see cref="IList{T}" />.
     /// </summary>
     public static class ShuffleExtensions
     {
         private static readonly Random Rng = new Random();
 
         /// <summary>
-        /// Shuffles the items in a list.
+        ///     Shuffles the items in a list.
         /// </summary>
         /// <param name="list">The list that should get shuffled.</param>
         /// <typeparam name="T">The type.</typeparam>

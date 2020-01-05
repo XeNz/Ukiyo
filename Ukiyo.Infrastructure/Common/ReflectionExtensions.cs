@@ -23,9 +23,7 @@ namespace Ukiyo.Infrastructure.Common
             if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Nullable<>) ||
                                        type.GetGenericTypeDefinition() == typeof(List<>) ||
                                        type.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
-            {
                 type = type.GetGenericArguments()[0];
-            }
 
 
             return type.IsPrimitive
@@ -50,10 +48,7 @@ namespace Ukiyo.Infrastructure.Common
         {
             var attribute = member.GetCustomAttributes(typeof(T), false).SingleOrDefault();
 
-            if (attribute == null && isRequired)
-            {
-                throw new ArgumentException($"The {typeof(T).Name} attribute must be defined on member {member.Name}");
-            }
+            if (attribute == null && isRequired) throw new ArgumentException($"The {typeof(T).Name} attribute must be defined on member {member.Name}");
 
             return (T) attribute;
         }

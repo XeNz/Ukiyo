@@ -18,7 +18,7 @@ namespace Ukiyo.Infrastructure.CQRS.Extensions
 
             return builder;
         }
-        
+
         public static IUkiyoBuilder AddInMemoryEventDispatcher(this IUkiyoBuilder builder)
         {
             builder.Services.AddSingleton<IEventDispatcher, EventDispatcher>();

@@ -4,6 +4,5 @@ namespace Ukiyo.Infrastructure.DAL.Identity
 {
     public class ApplicationUser : IdentityUser
     {
-        
     }
 }

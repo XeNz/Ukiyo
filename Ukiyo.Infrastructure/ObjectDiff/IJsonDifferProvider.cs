@@ -12,7 +12,7 @@ namespace Ukiyo.Infrastructure.ObjectDiff
         /// <param name="to">To JToken</param>
         /// <param name="useIdPropertyToDetermineEquality">Whether or not to use the 'Id' property to check if objects are equal</param>
         /// <returns></returns>
-        PatchDocument Diff(JToken @from, JToken to, bool useIdPropertyToDetermineEquality);
+        PatchDocument Diff(JToken from, JToken to, bool useIdPropertyToDetermineEquality);
 
         /// <summary>
         ///     Creates a patch document based on two objects represented in JTokens
@@ -21,8 +21,6 @@ namespace Ukiyo.Infrastructure.ObjectDiff
         /// <param name="to">To object</param>
         /// <param name="useIdPropertyToDetermineEquality">Whether or not to use the 'Id' property to check if objects are equal</param>
         /// <returns></returns>
-        PatchDocument Diff(object @from, object to, bool useIdPropertyToDetermineEquality);
-        
-        
+        PatchDocument Diff(object from, object to, bool useIdPropertyToDetermineEquality);
     }
 }

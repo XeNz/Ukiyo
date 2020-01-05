@@ -115,10 +115,7 @@ namespace Ukiyo.Infrastructure.WebApi
             where T : class
         {
             var request = await httpContext.ReadJsonAsync<T>();
-            if (request is null || context is null)
-            {
-                return;
-            }
+            if (request is null || context is null) return;
 
             await context.Invoke(request, httpContext);
         }
@@ -128,10 +125,7 @@ namespace Ukiyo.Infrastructure.WebApi
             where T : class
         {
             var request = httpContext.ReadQuery<T>();
-            if (request is null || context is null)
-            {
-                return;
-            }
+            if (request is null || context is null) return;
 
             await context.Invoke(request, httpContext);
         }
@@ -153,17 +147,18 @@ namespace Ukiyo.Infrastructure.WebApi
         }
 
         private void AddEndpointDefinition<T>(string method, string path)
-            => AddEndpointDefinition(method, path, typeof(T), null);
+        {
+            AddEndpointDefinition(method, path, typeof(T), null);
+        }
 
         private void AddEndpointDefinition<T, U>(string method, string path)
-            => AddEndpointDefinition(method, path, typeof(T), typeof(U));
+        {
+            AddEndpointDefinition(method, path, typeof(T), typeof(U));
+        }
 
         private void AddEndpointDefinition(string method, string path, Type input, Type output)
         {
-            if (_definitions.Exists(d => d.Path == path))
-            {
-                return;
-            }
+            if (_definitions.Exists(d => d.Path == path)) return;
 
             _definitions.Add(new WebApiEndpointDefinition
             {

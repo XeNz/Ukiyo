@@ -7,9 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Open.Serialization;
 using Open.Serialization.Json;
 using Ukiyo.Infrastructure.CQRS.Events;
 using Ukiyo.Infrastructure.WebApi.Helpers;
@@ -19,14 +16,14 @@ namespace Ukiyo.Infrastructure.WebApi.CQRS.Middlewares
     public class PublicContractsMiddleware
     {
         private const string ContentType = "application/json";
-        private readonly RequestDelegate _next;
-        private readonly string _endpoint;
-        private readonly bool _attributeRequired;
-        private readonly IJsonSerializer _jsonSerializer;
 
         private static readonly ContractTypes Contracts = new ContractTypes();
         private static int _initialized;
         private static string _serializedContracts = "{}";
+        private readonly bool _attributeRequired;
+        private readonly string _endpoint;
+        private readonly IJsonSerializer _jsonSerializer;
+        private readonly RequestDelegate _next;
 
         public PublicContractsMiddleware(RequestDelegate next, string endpoint, Type attributeType,
             bool attributeRequired, IJsonSerializer jsonSerializer)
@@ -35,20 +32,14 @@ namespace Ukiyo.Infrastructure.WebApi.CQRS.Middlewares
             _endpoint = endpoint;
             _attributeRequired = attributeRequired;
             _jsonSerializer = jsonSerializer;
-            if (_initialized == 1)
-            {
-                return;
-            }
+            if (_initialized == 1) return;
 
-            Load(attributeType); 
+            Load(attributeType);
         }
 
         public Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Path != _endpoint)
-            {
-                return _next(context);
-            }
+            if (context.Request.Path != _endpoint) return _next(context);
 
             context.Response.ContentType = ContentType;
             context.Response.WriteAsync(_serializedContracts);
@@ -58,10 +49,7 @@ namespace Ukiyo.Infrastructure.WebApi.CQRS.Middlewares
 
         private void Load(Type attributeType)
         {
-            if (Interlocked.Exchange(ref _initialized, 1) == 1)
-            {
-                return;
-            }
+            if (Interlocked.Exchange(ref _initialized, 1) == 1) return;
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             var contracts = assemblies.SelectMany(a => a.GetTypes())
@@ -72,10 +60,7 @@ namespace Ukiyo.Infrastructure.WebApi.CQRS.Middlewares
             {
                 var instance = FormatterServices.GetUninitializedObject(command);
                 var name = instance.GetType().Name;
-                if (Contracts.Commands.ContainsKey(name))
-                {
-                    throw new InvalidOperationException($"Command: '{name}' already exists.");
-                }
+                if (Contracts.Commands.ContainsKey(name)) throw new InvalidOperationException($"Command: '{name}' already exists.");
 
                 instance.SetDefaultInstanceProperties();
                 Contracts.Commands[name] = instance;
@@ -86,10 +71,7 @@ namespace Ukiyo.Infrastructure.WebApi.CQRS.Middlewares
             {
                 var instance = FormatterServices.GetUninitializedObject(@event);
                 var name = instance.GetType().Name;
-                if (Contracts.Events.ContainsKey(name))
-                {
-                    throw new InvalidOperationException($"Event: '{name}' already exists.");
-                }
+                if (Contracts.Events.ContainsKey(name)) throw new InvalidOperationException($"Event: '{name}' already exists.");
 
                 instance.SetDefaultInstanceProperties();
                 Contracts.Events[name] = instance;

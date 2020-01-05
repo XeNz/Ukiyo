@@ -4,6 +4,7 @@ namespace Ukiyo.Infrastructure.CQRS.Queries
     {
     }
 
+    // ReSharper disable once UnusedTypeParameter
     public interface IQuery<T> : IQuery
     {
     }

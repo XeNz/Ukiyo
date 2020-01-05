@@ -13,7 +13,7 @@ namespace Ukiyo.Infrastructure.WebApi
         public IEnumerable<WebApiEndpointParameter> Parameters { get; set; } = new List<WebApiEndpointParameter>();
         public IEnumerable<WebApiEndpointResponse> Responses { get; set; } = new List<WebApiEndpointResponse>();
     }
-    
+
     public class WebApiEndpointParameter
     {
         public string In { get; set; }
@@ -21,7 +21,7 @@ namespace Ukiyo.Infrastructure.WebApi
         public string Name { get; set; }
         public object Example { get; set; }
     }
-    
+
     public class WebApiEndpointResponse
     {
         public string Type { get; set; }

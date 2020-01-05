@@ -11,22 +11,18 @@ namespace Ukiyo.Infrastructure.Common
     {
         private static readonly Regex CamelCaseRegex = new Regex("(?<!^)[A-Z]", RegexOptions.Compiled);
 
+        private static readonly Regex CollapseSpace = new Regex(@"\s+", RegexOptions.Compiled);
+
         public static string FirstCharToLower(this string input)
         {
-            if (string.IsNullOrEmpty(input))
-            {
-                return string.Empty;
-            }
+            if (string.IsNullOrEmpty(input)) return string.Empty;
 
             return char.ToLowerInvariant(input.First()) + input.Substring(1);
         }
 
         public static string FirstCharToUpper(this string input)
         {
-            if (string.IsNullOrEmpty(input))
-            {
-                return string.Empty;
-            }
+            if (string.IsNullOrEmpty(input)) return string.Empty;
 
             return char.ToUpperInvariant(input.First()) + input.Substring(1);
         }
@@ -35,8 +31,6 @@ namespace Ukiyo.Infrastructure.Common
         {
             return string.Format(format, formattingArgs);
         }
-
-        private static readonly Regex CollapseSpace = new Regex(@"\s+", RegexOptions.Compiled);
 
         public static string Replace(this string text, int index, int length, string replacement)
         {
@@ -53,10 +47,7 @@ namespace Ukiyo.Infrastructure.Common
             foreach (var c in normalizedString)
             {
                 var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
-                {
-                    stringBuilder.Append(c);
-                }
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark) stringBuilder.Append(c);
             }
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
@@ -112,10 +103,7 @@ namespace Ukiyo.Infrastructure.Common
 
         public static string WrapInQuotes(this string text)
         {
-            if (!text.Contains(" "))
-            {
-                return text;
-            }
+            if (!text.Contains(" ")) return text;
 
             return "\"" + text + "\"";
         }
@@ -140,7 +128,7 @@ namespace Ukiyo.Infrastructure.Common
             var first = int.Parse(octalValue.Substring(0, 1));
             var second = int.Parse(octalValue.Substring(1, 1));
             var third = int.Parse(octalValue.Substring(2, 1));
-            var byteResult = (byte) ((first << 6) | (second << 3) | (third));
+            var byteResult = (byte) ((first << 6) | (second << 3) | third);
 
             return Encoding.ASCII.GetString(new[] {byteResult});
         }
@@ -156,7 +144,7 @@ namespace Ukiyo.Infrastructure.Common
         }
 
         /// <summary>
-        /// Strips the HTML.
+        ///     Strips the HTML.
         /// </summary>
         /// <param name="htmlString">The HTML string.</param>
         /// <returns><see cref="string" />.</returns>

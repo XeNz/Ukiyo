@@ -10,7 +10,6 @@ namespace Ukiyo.Infrastructure.DAL
         where TContext : DbContext, IDisposable
     {
         private Dictionary<Type, object> _repositories;
-        public TContext Context { get; }
 
         public UnitOfWork(TContext context)
         {
@@ -25,6 +24,8 @@ namespace Ukiyo.Infrastructure.DAL
             if (!_repositories.ContainsKey(type)) _repositories[type] = new EfRepository<TEntity>(Context);
             return (IRepository<TEntity>) _repositories[type];
         }
+
+        public TContext Context { get; }
 
 
         public Task<int> SaveChangesAsync()

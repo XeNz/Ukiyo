@@ -80,10 +80,7 @@ namespace Ukiyo.Infrastructure.WebApi.Parsers
         {
             var key = _currentPath;
 
-            if (_mappings.ContainsKey(key))
-            {
-                throw new FormatException($"Duplicated key: '{key}'");
-            }
+            if (_mappings.ContainsKey(key)) throw new FormatException($"Duplicated key: '{key}'");
             _mappings[key] = data.ToString();
         }
 

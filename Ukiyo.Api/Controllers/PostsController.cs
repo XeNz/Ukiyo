@@ -1,8 +1,3 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Ukiyo.Api.CQRS;
-using Ukiyo.Infrastructure.CQRS.Dispatchers;
-
 namespace Ukiyo.Api.Controllers
 {
     // [Route("posts")]

@@ -2,11 +2,6 @@ namespace Ukiyo.Infrastructure.CQRS.Queries
 {
     public abstract class PagedResultBase
     {
-        public int CurrentPage { get; }
-        public int ResultsPerPage { get; }
-        public int TotalPages { get; }
-        public long TotalResults { get; }
-
         protected PagedResultBase()
         {
         }
@@ -19,5 +14,10 @@ namespace Ukiyo.Infrastructure.CQRS.Queries
             TotalPages = totalPages;
             TotalResults = totalResults;
         }
+
+        public int CurrentPage { get; }
+        public int ResultsPerPage { get; }
+        public int TotalPages { get; }
+        public long TotalResults { get; }
     }
 }

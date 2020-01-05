@@ -11,15 +11,15 @@ namespace Ukiyo.Infrastructure.WebApi
 
         private static readonly IJsonFormatterResolver[] Resolvers =
         {
-            StandardResolver.AllowPrivateCamelCase,
+            StandardResolver.AllowPrivateCamelCase
         };
+
+        public static List<IJsonFormatter> Formatters { get; } = new List<IJsonFormatter>();
 
         public IJsonFormatter<T> GetFormatter<T>()
         {
             return FormatterCache<T>.Formatter;
         }
-
-        public static List<IJsonFormatter> Formatters { get; } = new List<IJsonFormatter>();
 
         private static class FormatterCache<T>
         {
@@ -28,25 +28,20 @@ namespace Ukiyo.Infrastructure.WebApi
             static FormatterCache()
             {
                 foreach (var item in Formatters)
+                foreach (var implInterface in item.GetType().GetTypeInfo().ImplementedInterfaces)
                 {
-                    foreach (var implInterface in item.GetType().GetTypeInfo().ImplementedInterfaces)
+                    var ti = implInterface.GetTypeInfo();
+                    if (ti.IsGenericType && ti.GenericTypeArguments[0] == typeof(T))
                     {
-                        var ti = implInterface.GetTypeInfo();
-                        if (ti.IsGenericType && ti.GenericTypeArguments[0] == typeof(T))
-                        {
-                            Formatter = (IJsonFormatter<T>) item;
-                            return;
-                        }
+                        Formatter = (IJsonFormatter<T>) item;
+                        return;
                     }
                 }
 
                 foreach (var item in Resolvers)
                 {
                     var formatter = item.GetFormatter<T>();
-                    if (formatter is null)
-                    {
-                        continue;
-                    }
+                    if (formatter is null) continue;
 
                     Formatter = formatter;
                     return;

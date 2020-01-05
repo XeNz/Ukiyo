@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Figgle;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,10 +21,7 @@ namespace Ukiyo.Infrastructure.Ioc.Extensions
             builder.Services.AddMemoryCache();
             services.AddSingleton(options);
             services.AddSingleton<IServiceId, ServiceId>();
-            if (options.DisplayBanner && !string.IsNullOrWhiteSpace(options.Name))
-            {
-                Console.WriteLine(Figgle.FiggleFonts.Doom.Render($"{options.Name} {options.Version}"));
-            }
+            if (options.DisplayBanner && !string.IsNullOrWhiteSpace(options.Name)) Console.WriteLine(FiggleFonts.Doom.Render($"{options.Name} {options.Version}"));
 
             return builder;
         }
@@ -33,10 +31,7 @@ namespace Ukiyo.Infrastructure.Ioc.Extensions
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var initializer = scope.ServiceProvider.GetService<IStartupInitializer>();
-                if (initializer is null)
-                {
-                    throw new InvalidOperationException("Startup initializer was not found.");
-                }
+                if (initializer is null) throw new InvalidOperationException("Startup initializer was not found.");
 
                 Task.Run(() => initializer.InitializeAsync()).GetAwaiter().GetResult();
             }
@@ -67,10 +62,7 @@ namespace Ukiyo.Infrastructure.Ioc.Extensions
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var initializer = scope.ServiceProvider.GetService<IStartupInitializer>();
-                if (initializer is null)
-                {
-                    throw new InvalidOperationException("Startup initializer was not found.");
-                }
+                if (initializer is null) throw new InvalidOperationException("Startup initializer was not found.");
 
                 Task.Run(() => initializer.InitializeAsync()).GetAwaiter().GetResult();
             }
@@ -79,6 +71,8 @@ namespace Ukiyo.Infrastructure.Ioc.Extensions
         }
 
         public static string Underscore(this string value)
-            => string.Concat(value.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString()));
+        {
+            return string.Concat(value.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x : x.ToString()));
+        }
     }
 }

@@ -17,10 +17,7 @@ namespace Ukiyo.Infrastructure.CQRS.Dispatchers
         {
             using var scope = _serviceFactory.CreateScope();
             var handlers = scope.ServiceProvider.GetServices<IEventHandler<T>>();
-            foreach (var handler in handlers)
-            {
-                await handler.HandleAsync(@event);
-            }
+            foreach (var handler in handlers) await handler.HandleAsync(@event);
         }
     }
 }

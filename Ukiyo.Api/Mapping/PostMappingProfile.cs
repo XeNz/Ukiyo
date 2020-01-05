@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Ukiyo.Api.CQRS;
+using Ukiyo.Api.CQRS.Queries.Posts;
 using Ukiyo.Api.Dtos;
 using Ukiyo.Core.Entities;
 using Ukiyo.Infrastructure.DAL.Identity;

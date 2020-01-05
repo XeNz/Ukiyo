@@ -19,7 +19,7 @@ namespace Ukiyo.Core
             var dbOptions = configuration.GetOptions<DatabaseOptions>("dataaccess");
 
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseNpgsql(dbOptions.GetApplicationConnectionString());
+            optionsBuilder.UseNpgsql(dbOptions.GetConnectionString());
 
             return new AppDbContext(optionsBuilder.Options);
         }

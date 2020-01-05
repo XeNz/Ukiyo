@@ -33,10 +33,7 @@ namespace Ukiyo.Infrastructure.WebApi.CQRS.Builders
         {
             _builder.Get<TQuery>(path, async (query, ctx) =>
             {
-                if (beforeDispatch is {})
-                {
-                    await beforeDispatch(query, ctx);
-                }
+                if (beforeDispatch is {}) await beforeDispatch(query, ctx);
 
                 var dispatcher = ctx.RequestServices.GetRequiredService<IQueryDispatcher>();
                 var result = await dispatcher.QueryAsync<TQuery, TResult>(query);
@@ -115,10 +112,7 @@ namespace Ukiyo.Infrastructure.WebApi.CQRS.Builders
             Func<T, HttpContext, Task> beforeDispatch = null,
             Func<T, HttpContext, Task> afterDispatch = null) where T : class, ICommand
         {
-            if (beforeDispatch is {})
-            {
-                await beforeDispatch(command, context);
-            }
+            if (beforeDispatch is {}) await beforeDispatch(command, context);
 
             var dispatcher = context.RequestServices.GetRequiredService<ICommandDispatcher>();
             await dispatcher.SendAsync(command);

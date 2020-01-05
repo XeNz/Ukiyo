@@ -11,10 +11,7 @@ namespace Ukiyo.Infrastructure.WebApi.Helpers
         public static object SetDefaultInstanceProperties(this object instance)
         {
             var type = instance.GetType();
-            foreach (var propertyInfo in type.GetProperties())
-            {
-                SetValue(propertyInfo, instance);
-            }
+            foreach (var propertyInfo in type.GetProperties()) SetValue(propertyInfo, instance);
 
             return instance;
         }
@@ -35,10 +32,7 @@ namespace Ukiyo.Infrastructure.WebApi.Helpers
                 return;
             }
 
-            if (propertyType.IsInterface)
-            {
-                return;
-            }
+            if (propertyType.IsInterface) return;
 
             if (propertyType.IsArray)
             {
@@ -46,10 +40,7 @@ namespace Ukiyo.Infrastructure.WebApi.Helpers
                 return;
             }
 
-            if (!propertyType.IsClass)
-            {
-                return;
-            }
+            if (!propertyType.IsClass) return;
 
             var propertyInstance = FormatterServices.GetUninitializedObject(propertyInfo.PropertyType);
             SetDefaultValue(propertyInfo, instance, propertyInstance);
@@ -61,10 +52,7 @@ namespace Ukiyo.Infrastructure.WebApi.Helpers
             var elementType = propertyInfo.PropertyType.IsGenericType
                 ? propertyInfo.PropertyType.GenericTypeArguments[0]
                 : propertyInfo.PropertyType.GetElementType();
-            if (elementType is null)
-            {
-                return;
-            }
+            if (elementType is null) return;
 
             if (typeof(IEnumerable).IsAssignableFrom(elementType))
             {
@@ -73,14 +61,14 @@ namespace Ukiyo.Infrastructure.WebApi.Helpers
                     SetDefaultValue(propertyInfo, instance, Array.Empty<string>());
                     return;
                 }
-                
+
                 return;
             }
 
             var array = Array.CreateInstance(elementType, 0);
             SetDefaultValue(propertyInfo, instance, array);
         }
-        
+
         private static void SetDefaultValue(PropertyInfo propertyInfo, object instance, object value)
         {
             if (propertyInfo.CanWrite)

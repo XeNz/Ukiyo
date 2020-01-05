@@ -27,17 +27,14 @@ namespace Ukiyo.Infrastructure.Caching.Extensions
 
         public static IUkiyoBuilder AddRedis(this IUkiyoBuilder builder, RedisOptions options)
         {
-            if (!builder.TryRegister(RegistryName))
-            {
-                return builder;
-            }
+            if (!builder.TryRegister(RegistryName)) return builder;
 
             builder.Services.AddStackExchangeRedisCache(o =>
             {
                 o.Configuration = options.ConnectionString;
                 o.InstanceName = options.Instance;
             });
-            
+
             return builder;
         }
     }
