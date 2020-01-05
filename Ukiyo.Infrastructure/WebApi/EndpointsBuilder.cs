@@ -158,7 +158,7 @@ namespace Ukiyo.Infrastructure.WebApi
 
         private void AddEndpointDefinition(string method, string path, Type input, Type output)
         {
-            if (_definitions.Exists(d => d.Path == path)) return;
+            if (_definitions.Exists(d => d.Path == path && d.Method == method)) return;
 
             _definitions.Add(new WebApiEndpointDefinition
             {

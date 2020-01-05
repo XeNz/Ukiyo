@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ukiyo.Api.CQRS;
+using Ukiyo.Api.CQRS.Commands.Posts;
 using Ukiyo.Api.CQRS.Queries;
 using Ukiyo.Api.CQRS.Queries.Posts;
 using Ukiyo.Api.Dtos;
@@ -48,21 +49,18 @@ namespace Ukiyo.Api
                         .UseHttpsRedirection()
                         .UseRouting()
                         .UseAuthorization()
-                        // .UseEndpoints(endpoints => { endpoints.MapControllers(); })
                         .UseSwaggerDocs()
                         .UseDispatcherEndpoints(endpoints => endpoints
-                                .Get("", ctx =>
-                                {
-                                    var appOptions = ctx.RequestServices.GetService<AppOptions>();
-                                    return ctx.Response.WriteAsync(FiggleFonts.Doom.Render($"{appOptions.Name} {appOptions.Version}"));
-                                })
-                                .Get<GetPostsQuery, PostCollectionDto>("posts")
-                                .Get<GetPostByIdQuery, PostDto>("posts/{postId}")
-                            // .Get<SearchVehicles, PagedResult<VehicleDto>>("vehicles")
-                            // .Post<AddVehicle>("vehicles",
-                            //     afterDispatch: (cmd, ctx) => ctx.Response.Created($"vehicles/{cmd.VehicleId}"))
-                            // .Put<UpdateVehicle>("vehicles/{vehicleId}")
-                            // .Delete<DeleteVehicle>("vehicles/{vehicleId}")
+                            .Get("", ctx =>
+                            {
+                                var appOptions = ctx.RequestServices.GetService<AppOptions>();
+                                return ctx.Response.WriteAsync(FiggleFonts.Doom.Render($"{appOptions.Name} {appOptions.Version}"));
+                            })
+                            .Get<GetPostsQuery, PostCollectionDto>("posts")
+                            .Get<GetPostByIdQuery, PostDto>("posts/{postId}")
+                            .Post<CreatePostCommand>("posts", afterDispatch: (cmd, ctx) => ctx.Response.Created($"vehicles/{cmd.PostId}"))
+                            .Put<UpdatePostCommand>("posts/{postId}")
+                            .Delete<DeletePostCommand>("posts/{postId}")
                         ));
                 })
                 .Build()

@@ -10,15 +10,15 @@ namespace Ukiyo.Api.CQRS.Commands.Posts
 {
     public class CreatePostCommand : ICommand
     {
-        public CreatePostCommand(Guid id, string description, string code, LanguageDto codeLanguage)
+        public CreatePostCommand(Guid postId, string description, string code, LanguageDto codeLanguage)
         {
-            Id = id == default ? Guid.NewGuid() : id;
+            PostId = postId == default ? Guid.NewGuid() : postId;
             Description = description;
             Code = code;
             CodeLanguage = codeLanguage;
         }
 
-        public Guid Id { get; set; }
+        public Guid PostId { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }
         public LanguageDto CodeLanguage { get; set; }

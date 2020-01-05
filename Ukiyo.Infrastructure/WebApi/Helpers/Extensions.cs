@@ -40,7 +40,7 @@ namespace Ukiyo.Infrastructure.WebApi.Helpers
                 return;
             }
 
-            if (!propertyType.IsClass) return;
+            //if (!propertyType.IsClass) return;
 
             var propertyInstance = FormatterServices.GetUninitializedObject(propertyInfo.PropertyType);
             SetDefaultValue(propertyInfo, instance, propertyInstance);

@@ -98,8 +98,27 @@ namespace Ukiyo.Infrastructure.WebApi.Swagger.Filters
                     });
                 }
 
-                swaggerDoc.Paths.Add($"/{definition.Path}", pathItem);
+                if (swaggerDoc.Paths.TryGetValue($"/{definition.Path}", out var existingPathItem))
+                {
+                    existingPathItem.AddOperation(GetOperationType(definition.Method), operation);
+                }
+                else
+                {
+                    swaggerDoc.Paths.TryAdd($"/{definition.Path}", pathItem);
+                }
             }
+        }
+
+        private static OperationType GetOperationType(string path)
+        {
+            return path switch
+            {
+                "GET" => OperationType.Get,
+                "POST" => OperationType.Post,
+                "PUT" => OperationType.Put,
+                "DELETE" => OperationType.Delete,
+                _ => default
+            };
         }
     }
 }
