@@ -58,7 +58,7 @@ namespace Ukiyo.Api
                             })
                             .Get<GetPostsQuery, PostCollectionDto>("posts")
                             .Get<GetPostByIdQuery, PostDto>("posts/{postId}")
-                            .Post<CreatePostCommand>("posts", afterDispatch: (cmd, ctx) => ctx.Response.Created($"vehicles/{cmd.PostId}"))
+                            .Post<CreatePostCommand>("posts", afterDispatch: (cmd, ctx) => ctx.Response.Created($"posts/{cmd.PostId}"))
                             .Put<UpdatePostCommand>("posts/{postId}")
                             .Delete<DeletePostCommand>("posts/{postId}")
                         ));
